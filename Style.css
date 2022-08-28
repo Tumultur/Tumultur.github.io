@@ -1,0 +1,66 @@
+*{
+  margin: 0;
+  padding: 0;
+  line-height: 1.5;
+  font-family: 'IBM Plex', "Helvetica Neue", Helvetica, Arial, "Microsoft Yahei";
+  font-weight: 300;
+  font-size: 20px;
+}
+
+/* Header and elements inside */
+header{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+}
+.header-title{
+  color: #FFF;
+  font-size: 36px;
+}
+.header-link-container{
+  position: absolute;
+  right: 20px;
+}
+.header-link{
+  color: #FFF;
+  padding: 3px 10px;
+  border: 1px solid;
+  border-color: #FFF;
+  margin: 0 5px;
+}
+
+/* Main */
+main{
+  max-width: 800px;
+  margin: auto;
+  padding: 15px;
+}
+
+/* Hyperlinks */
+a{
+  text-decoration: none;
+}
+a:hover{
+  text-decoration: underline;
+}
+
+/* Description */
+.description p{
+  margin: 0;
+}
+
+/* Items inside a module */
+.module-title{
+  font-size: 28px;
+  margin-top: 15px;
+  margin-bottom: 5px;
+}
+.module-content:nth-child(even){
+  background-color: #f3f3f3;
+  border-top: 1px solid #cccccc;
+  border-bottom: 1px solid #cccccc;
+}
+.module-content:last-child{
+  border-bottom: 1px solid #cccccc;
+}
