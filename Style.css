@@ -1,13 +1,14 @@
-*{
+body {
   margin: 0;
   padding: 0;
-  line-height: 1.5;
+  line-height: 1.2;
   font-family: 'IBM Plex', "Helvetica Neue", Helvetica, Arial, "Microsoft Yahei";
-  font-weight: 300;
-  font-size: 20px;
+  font-weight: 400;
+  font-size: 18px;
 }
 
-/* Header and elements inside */
+
+/* header */
 header{
   display: flex;
   align-items: center;
@@ -16,7 +17,10 @@ header{
 }
 .header-title{
   color: #FFF;
-  font-size: 36px;
+  font-size: 32px;
+}
+.header-title:hover{
+  text-decoration: none
 }
 .header-link-container{
   position: absolute;
@@ -25,41 +29,58 @@ header{
 .header-link{
   color: #FFF;
   padding: 3px 10px;
-  border: 1px solid;
-  margin: 0 5px;
+  border: 1.5px solid;
+  border-color: #FFF;
+  font-size: 18px !important;
 }
 
-/* Main */
+/* main */
 main{
-  max-width: 800px;
+  width: 600px;
+  min-width: 60%;
   margin: auto;
   padding: 15px;
 }
 
-/* Hyperlinks */
+/* hyperlink */
 a{
   text-decoration: none;
+  color: black;
 }
 a:hover{
   text-decoration: underline;
 }
 
-/* Description */
+/* description */
 .description p{
   margin: 0;
 }
 
-/* Items inside a module */
+/* module */
 .module-title{
   font-size: 28px;
+  font-style: italic;
   margin-top: 15px;
   margin-bottom: 5px;
 }
-.module-content:nth-child(even){
+.module-box:nth-child(even){
   background-color: #f3f3f3;
   border-top: 1px solid #cccccc;
   border-bottom: 1px solid #cccccc;
 }
-.module-content:last-child{
+.module-box:last-child{
   border-bottom: 1px solid #cccccc;
+}
+.module-box{
+  padding-top: 6px;
+  padding-bottom: 6px;
+}
+.module-hyperlink{
+  font-size: 20px;
+  display: inline-block;
+  width: 100%;
+}
+.module-description{
+  font-size: 16px;
+  color: #888888;
 }

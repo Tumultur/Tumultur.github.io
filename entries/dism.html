@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="author" content="Joseph Moore">
+    <meta name="description" content="Self-learning HTML and CSS basics">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tmlt_blog</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="../fonts/ibm_plex/IBM_Plex.css">
+    <link rel="stylesheet" href="../fonts/ibm_plex_mono/IBM_Plex.css">
+    <link rel="icon" href="../focus.png">
+</head>
+<body>
+    <header style="background-color: #23507f;">
+        <a class="header-title" href="../index.html">Tmlt_blog</a>
+        <p class="header-link-container">
+            <a class="header-link" href="https://github.com/Tumultur" target="_blank">Github</a>
+        </p>
+    </header>
+    <main>
+        <div class="entry-header">
+            <p class="entry-header-title">编辑和重打包 Windows 镜像</p>
+            <p class="entry-header-date">2022-09-13</p>        
+        </div>
+        <div class="entry-paragraph">
+            <p class="entry-paragraph-content">
+                编辑完成之后，须将 install.wim 打包回镜像文件。市面上不乏方便好用的第三方工具，但是对纯净系统的偏执搞得我不得不使用微软自家的方法。
+            </p>
+        </div>
+        <table class="entry-code">
+            <tr class="entry-code-line">
+                <td class="entry-code-line-number">1</td>
+                <td class="entry-code-content">Oscdimg-bootdata:2#p0,e,b<span class="entry-code-highlight">%ETFSBOOT.COM_PATH%</span>#pEF,e,b<span class="entry-code-highlight">%EFISYS.BIN_PATH%</span> -u1 -udfver102 <span class="entry-code-highlight">%MODIFIED_SYSTEM_PATH%</span> <span class="entry-code-highlight">%ISO_PATH%</span></td>
+            </tr>
+        </table>
+        <div class="entry-paragraph">
+            <p class="entry-paragraph-content">
+                其中，<span class="entry-paragraph-inline-code">%ETFSBOOT.COM_PATH%</span> 是 boot 文件夹中 etfsboot.com 的路径；而 <span class="entry-paragraph-inline-code">%EFISYS.BIN_PATH%</span> 则是 efi\microsoft\boot 中的 efisys.bin。<span class="entry-paragraph-inline-code">%MODIFIED_SYSTEM_PATH%</span> 是挂载系统的根目录，<span class="entry-paragraph-inline-code">%ISO_PATH%</span> 是输出镜像文件的路径。
+            </p>
+            <p class="entry-paragraph-content">
+                举例来说，对于挂载在 D 盘根目录的镜像，应使用如下命令。
+            </p>
+        </div>
+        <table class="entry-code">
+            <tr class="entry-code-line">
+                <td class="entry-code-line-number">1</td>
+                <td class="entry-code-content">Oscdimg -bootdata:2#p0,e,b“D:\Windows\boot\etfsboot.com”#pEF,e,b“D:\Windows\efi\microsoft\boot\efisys.bin” -u1 -udfver102 “D:\Windows” “D:\Windows.iso”</td>
+            </tr>
+        </table>
+        <div class="entry-paragraph">
+            <p class="entry-paragraph-content">
+                输出镜像和未修改镜像的体积应该相差较小。
+            </p>
+        </div>
+    </main>
+</body>

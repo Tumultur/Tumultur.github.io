@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="author" content="Joseph Moore">
+    <meta name="description" content="Self-learning HTML and CSS basics">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tmlt_blog</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="../fonts/ibm_plex/IBM_Plex.css">
+    <link rel="stylesheet" href="../fonts/ibm_plex_mono/IBM_Plex.css">
+    <link rel="icon" href="../focus.png">
+</head>
+<body>
+    <header style="background-color: #23507f;">
+        <a class="header-title" href="../index.html">Tmlt_blog</a>
+        <p class="header-link-container">
+            <a class="header-link" href="https://github.com/Tumultur" target="_blank">Github</a>
+        </p>
+    </header>
+    <main>
+        <div class="entry-header">
+            <p class="entry-header-title">BMS：从图片合成 BGA 的一次实践</p>
+            <p class="entry-header-date">2022-08-23</p>    
+        </div>
+        <div class="entry-paragraph">
+            <p class="entry-paragraph-title">前情</p>
+            <p class="entry-paragraph-content">
+                《DRAGONLADY》这首曲子由于曲名的关系饱受迫害，已经成为泛恶俗经典要素之一。但是抛开迷因不谈，曲子本身和 BGA 都是非常优秀的。可惜因为创作年代久远，BGA 是以图片形式储存，如果不是使用 Lunatic Rave 2 等 BMS 客户端，很难直接播放。使用在客户端内录屏的方式获取视频，效果也不尽人意。
+            </p>
+            <p class="entry-paragraph-content">
+                然而我对于这迷之洗脑的 BGA 实在太着迷，以至于怎么都想搞到高质量的视频文件。既然没有现成的，就只能自己做了。
+            </p>
+            <p class="entry-paragraph-content">
+                BMS 文件并不难找，<a href="http://uploader.bms.ms/data/bof2009/Nankumo/dragonlady.zip">当时会场的下载链接</a>现在仍然坚挺。剩下的只有找出 BGA 编码的方式，然后把整理好的图片转换成视频就好了，多么简单。
+            </p>
+        </div>
+        <div class="entry-paragraph">
+            <p class="entry-paragraph-title">第一次尝试</p>
+            <p class="entry-paragraph-content">
+                文件夹内图片的命名方式如下：
+            </p>
+        </div>
+        <table class="entry-code">
+            <tr class="entry-code-line">
+                <td class="entry-code-line-number">1</td>
+                <td class="entry-code-content">cube_bear01_00.bmp</td>
+            </tr>
+            <tr class="entry-code-line">
+                <td class="entry-code-line-number">2</td>
+                <td class="entry-code-content">cube_bear01_01.bmp</td>
+            </tr>
+            <tr class="entry-code-line">
+                <td class="entry-code-line-number">3</td>
+                <td class="entry-code-content">…</td>
+            </tr>
+            <tr class="entry-code-line">
+                <td class="entry-code-line-number">4</td>
+                <td class="entry-code-content">cube_warp_22.bmp</td>
+            </tr>
+            <tr class="entry-code-line">
+                <td class="entry-code-line-number">5</td>
+                <td class="entry-code-content">cube_warp_23.bmp</td>
+            </tr>
+        </table>
+        <div class="entry-paragraph">
+            <p class="entry-paragraph-content">
+                同时， BMS 文件内包含文件名和编码的对应表：
+            </p>
+        </div>
+        <table class="entry-code">
+            <tr class="entry-code-line">
+                <td class="entry-code-line-number">1</td>
+                <td class="entry-code-content">#BMP01 cube_kappa01_00.bmp</td>
+            </tr>
+            <tr class="entry-code-line">
+                <td class="entry-code-line-number">2</td>
+                <td class="entry-code-content">#BMP02 cube_kappa01_01.bmp</td>
+            </tr>
+            <tr class="entry-code-line">
+                <td class="entry-code-line-number">3</td>
+                <td class="entry-code-content">…</td>
+            </tr>
+            <tr class="entry-code-line">
+                <td class="entry-code-line-number">4</td>
+                <td class="entry-code-content">#BMPF3 cube_miss_02.bmp</td>
+            </tr>
+            <tr class="entry-code-line">
+                <td class="entry-code-line-number">5</td>
+                <td class="entry-code-content">#BMPF4 cube_first_01.bmp</td>
+            </tr>
+        </table>
+        <div class="entry-paragraph">
+            <p class="entry-paragraph-content">
+                BMS 谱面本体共有 000 – 055 共 56 个部分，长度不一。观察发现每部分编号 04 的一行代表该部分的 BGA。
+            </p>
+        </div>
+        <table class="entry-code">
+            <tr class="entry-code-line">
+                <td class="entry-code-line-number">1</td>
+                <td class="entry-code-content">#00004:F4</td>
+            </tr>
+            <tr class="entry-code-line">
+                <td class="entry-code-line-number">2</td>
+                <td class="entry-code-content">#00104:0102030405060708090A0B0C0D00000000000000000E0F0G0H0I0J0K0L0M0N0O0P0Q0R00000000000000000000313233</td>
+            </tr>
+            <tr class="entry-code-line">
+                <td class="entry-code-line-number">3</td>
+                <td class="entry-code-content">…</td>
+            </tr>
+            <tr class="entry-code-line">
+                <td class="entry-code-line-number">4</td>
+                <td class="entry-code-content">#05504:A6A7A8A9AA94959697988W8X8Y8Z9092565758595A5B5C5D5J5K5L5M5N5O5P5QDIDJDKDLDMDN00000000DODPDQDRDTDUDVDWDXDYDZE0E1E2E3E4E5E600000000</td>
+            </tr>
+        </table>
+        <div class="entry-paragraph">
+            <p class="entry-paragraph-content">
+                不难看出其中每两个字符代表一张图片，00 代表重复上一张图片。
+            </p>
+            <p class="entry-paragraph-content">
+                将所有 BGA 行提取之后，共有 8608 个字符即 4304 张图片。按照 48 fps 来计算，视频长度为 89.67 秒，基本和音频时长相符。
+            </p>
+            <p class="entry-paragraph-content">
+                使用正则找到所有形如 "FF000000" 的字符串，然后进行替换。
+            </p>
+        </div>
+        <table class="entry-code">
+            <tr class="entry-code-line">
+                <td class="entry-code-line-number">1</td>
+                <td class="entry-code-content">([1-9A-Z][0-9A-Z])*(00)*</td>
+            </tr>
+        </table>
+        <div class="entry-paragraph">
+            <p class="entry-paragraph-content">
+                再利用编码和文件名的对应表，得到以时间顺序排列的文件名列表。最后按照这个顺序重命名为数字格式（如 00001.bmp, 00002.bmp…08608.bmp），再导入 ffmpeg，就可以得到视频。
+            </p>
+        </div>
+        <div class="entry-paragraph">
+            <p class="entry-paragraph-title">第二次尝试</p>
+            <p class="entry-paragraph-content">
+                事成之后我兴高采烈地按下播放，发现视频和音频根本不匹配。这搞得我十分懵逼，毕竟时长是完全对的上的。此时突然想到曲子的 BPM 是 150，每拍是 60/150 = 0.4 秒，而一个小节则是 1.6 秒，56 * 1.6 刚好也是 89.6 秒，所以每个部分对应的其实是一个四拍小节。结合第一次尝试所得视频的时长偏移情况，这个结论应该是准确的。
+            </p>
+            <p class="entry-paragraph-content">
+                每部分负责编码 BGA 的字符串长度不一，最多为 192张图片，最少为 48，还有一些是 64。取最小公倍数 192，再将长度为 48 或 64 的字符串扩展成原本的四倍或三倍，再按照上述的方法获得数字顺序的文件名，最后终于得到完全正确的视频。最终成品使用了 10752 张图片，帧率为 120。（小巧合：RTX 3090 Ti 的流处理器数量刚好也是 10752）
+            </p>
+            <p class="entry-paragraph-content">
+                原图片分辨率为 360x360，以现在的标准未免有些太小，所以使用 waifu2x 放大了四倍，不过效果不怎么明显。
+            </p>
+            <p class="entry-paragraph-content">
+                完成之后本来想分享到油管，没想到已经有人做过，成功的喜悦一下子减少许多。
+            </p>
+        </div>
+        <div class="entry-paragraph">
+            <p class="entry-paragraph-title">后记</p>
+            <p class="entry-paragraph-content">
+                整个过程基本都使用 Python 完成，代码非常脏，实在不好意思贴出来。这个方法大概率不适用于所有 BGA（而且现在的 BGA 似乎也都是普通视频格式了），所以实用价值不高。至于市面上有没有现成的 BGA 转换器，我也不知道，如果找得到的话，就不会有这篇文章了。<img src="dragonlady.png" alt="" width="18px" height="18px" style="vertical-align: middle;">
+            </p>
+        </div>
+        <div class="entry-image">
+            <img class="entry-image-content" src="output.png">
+        </div>
+    </main>
+</body>
