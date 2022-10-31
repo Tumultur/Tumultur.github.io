@@ -32,7 +32,7 @@
         <table class="entry-code">
             <tr class="entry-code-line">
                 <td class="entry-code-line-number">1</td>
-                <td class="entry-code-content"># Mount-WindowsImage -ImagePath <span class="entry-code-highlight">%WIM_PATH%</span> -Index <span class="entry-code-highlight">%IMAGE_INDEX%</span></td>
+                <td class="entry-code-content">Mount-WindowsImage -ImagePath <span class="entry-code-highlight">%WIM_PATH%</span> -Index <span class="entry-code-highlight">%IMAGE_INDEX%</span></td>
             </tr>
         </table>
         <div class="entry-paragraph">
@@ -48,39 +48,7 @@
             <p class="entry-paragraph-content">
                 使用 adguard 的<a href="https://store.rg-adguard.net/" target="_blank">应用包下载链接生成器</a>得到 App Installer 和其依赖的应用包，并在其 <a href="https://github.com/microsoft/winget-cli/releases/latest" target="_blank">GitHub Repo</a> 下载证书。大部分普通应用包不需要第二步。
             </p>
-            <p class="entry-paragraph-content">
-                后者用来激活默认关闭的的 Windows 功能，如 Hyper-V。
-            </p>
-            <p class="entry-paragraph-content">
-                使用 <span class="entry-paragraph-inline-code">Get-WindowsOptionalFeature</span> 获得所有功能的别名。
-            </p>
         </div>
-        <table class="entry-code">
-            <tr class="entry-code-line">
-                <td class="entry-code-line-number">1</td>
-                <td class="entry-code-content"># Get-WindowsOptionalFeature -Online</td>
-            </tr>
-            <tr class="entry-code-line">
-                <td class="entry-code-line-number">2</td>
-                <td class="entry-code-content"></td>
-            </tr>
-            <tr class="entry-code-line">
-                <td class="entry-code-line-number">3</td>
-                <td class="entry-code-content">> ...</td>
-            </tr>
-            <tr class="entry-code-line">
-                <td class="entry-code-line-number">4</td>
-                <td class="entry-code-content">> FeatureName : Microsoft-Windows-Subsystem-Linux</td>
-            </tr>
-            <tr class="entry-code-line">
-                <td class="entry-code-line-number">5</td>
-                <td class="entry-code-content">> State       : Disabled</td>
-            </tr>
-            <tr class="entry-code-line">
-                <td class="entry-code-line-number">6</td>
-                <td class="entry-code-content">> ...</td>
-            </tr>
-        </table>
         <table class="entry-code">
             <tr class="entry-code-line">
                 <td class="entry-code-line-number">1</td>
@@ -90,6 +58,71 @@
         <div class="entry-paragraph">
             <p class="entry-paragraph-content">
                 其中 <span class="entry-paragraph-inline-code">%MODIFIED_SYSTEM_PATH%</span> 是挂载系统的根目录，<span class="entry-paragraph-inline-code">%APPX-PATH%</span> 是包含所有所需文件（应用包本身、依赖和证书）的文件夹。
+            </p>
+            <p class="entry-paragraph-content">
+                后者用来激活默认关闭的的 Windows 功能，如 WSL 和 Hyper-V。
+            </p>
+            <p class="entry-paragraph-content">
+                使用 <span class="entry-paragraph-inline-code">Get-WindowsOptionalFeature</span> 获得指定功能的别名,然后激活。
+            </p>
+        </div>
+        <table class="entry-code">
+            <tr class="entry-code-line">
+                <td class="entry-code-line-number">1</td>
+                <td class="entry-code-content">Get-WindowsOptionalFeature -Online</td>
+            </tr>
+            <tr class="entry-code-line">
+                <td class="entry-code-line-number">2</td>
+                <td class="entry-code-content"></td>
+            </tr>
+            <tr class="entry-code-line">
+                <td class="entry-code-line-number">3</td>
+                <td class="entry-code-content">...</td>
+            </tr>
+            <tr class="entry-code-line">
+                <td class="entry-code-line-number">4</td>
+                <td class="entry-code-content">FeatureName : Microsoft-Windows-Subsystem-Linux</td>
+            </tr>
+            <tr class="entry-code-line">
+                <td class="entry-code-line-number">5</td>
+                <td class="entry-code-content">State       : Disabled</td>
+            </tr>
+            <tr class="entry-code-line">
+                <td class="entry-code-line-number">6</td>
+                <td class="entry-code-content">...</td>
+            </tr>
+        </table>
+        <table class="entry-code">
+            <tr class="entry-code-line">
+                <td class="entry-code-line-number">1</td>
+                <td class="entry-code-content">Enable-WindowsOptionalFeature -Path <span class="entry-code-highlight">%MODIFIED_SYSTEM_PATH%</span> -FeatureName <span class="entry-code-highlight">%FEATURE%</span> <span class="entry-code-highlight">-All</span></td>
+            </tr>
+        </table>
+        <div class="entry-paragraph">
+            <p class="entry-paragraph-content">
+                <span class="entry-paragraph-inline-code">-All</span> 会安装此功能的所有上级功能。注意对于 .NET Framework 3.5 这样 Windows 不自带的功能，需要使用 <span class="entry-paragraph-inline-code">-Source</span> 指定来源，并使用 <span class="entry-paragraph-inline-code">-LimitAccess</span> 来强制使用离线安装包 sources\sxs 路径中的安装包。
+            </p>
+        </div>
+        <table class="entry-code">
+            <tr class="entry-code-line">
+                <td class="entry-code-line-number">1</td>
+                <td class="entry-code-content">Enable-WindowsOptionalFeature -Path "D:\Windows" -FeatureName NetFx3 -All -LimitAccess -Source "D:\Windows\sources\sxs"</td>
+            </tr>
+        </table>
+        <div class="entry-paragraph">
+            <p class="entry-paragraph-content">
+                最后再保存修改即可。
+            </p>
+        </div>
+        <table class="entry-code">
+            <tr class="entry-code-line">
+                <td class="entry-code-line-number">1</td>
+                <td class="entry-code-content">Dismount-WindowsImage -Path "D:\Windows" -Save</td>
+            </tr>
+        </table>
+        <div class="entry-paragraph">
+            <p class="entry-paragraph-content">
+                DISM 当然还有其他功能，可配合<a href="https://learn.microsoft.com/en-us/powershell/module/dism/dismount-windowsimage?view=windowsserver2022-ps" target="_blank">文档</a>食用。
             </p>
         </div>
         <div class="entry-paragraph">
@@ -104,7 +137,7 @@
         <table class="entry-code">
             <tr class="entry-code-line">
                 <td class="entry-code-line-number">1</td>
-                <td class="entry-code-content">$ Oscdimg-bootdata:2#p0,e,b<span class="entry-code-highlight">%ETFSBOOT.COM_PATH%</span>#pEF,e,b<span class="entry-code-highlight">%EFISYS.BIN_PATH%</span> -u1 -udfver102 <span class="entry-code-highlight">%MODIFIED_SYSTEM_PATH%</span> <span class="entry-code-highlight">%ISO_PATH%</span></td>
+                <td class="entry-code-content">Oscdimg-bootdata:2#p0,e,b<span class="entry-code-highlight">%ETFSBOOT.COM_PATH%</span>#pEF,e,b<span class="entry-code-highlight">%EFISYS.BIN_PATH%</span> -u1 -udfver102 <span class="entry-code-highlight">%MODIFIED_SYSTEM_PATH%</span> <span class="entry-code-highlight">%ISO_PATH%</span></td>
             </tr>
         </table>
         <div class="entry-paragraph">
@@ -118,7 +151,7 @@
         <table class="entry-code">
             <tr class="entry-code-line">
                 <td class="entry-code-line-number">1</td>
-                <td class="entry-code-content">$ Oscdimg -bootdata:2#p0,e,b“D:\Windows\boot\etfsboot.com”#pEF,e,b“D:\Windows\efi\microsoft\boot\efisys.bin” -u1 -udfver102 “D:\Windows” “D:\Windows.iso”</td>
+                <td class="entry-code-content">Oscdimg -bootdata:2#p0,e,b"D:\Windows\boot\etfsboot.com"#pEF,e,b"D:\Windows\efi\microsoft\boot\efisys.bin" -u1 -udfver102 "D:\Windows" "D:\Windows.iso"</td>
             </tr>
         </table>
         <div class="entry-paragraph">
