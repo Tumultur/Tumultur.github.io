@@ -43,7 +43,7 @@ main{
 /* hyperlink */
 a{
   text-decoration: none;
-  color: black;
+  color: #666;
 }
 a:not(.header-title):hover{
   text-decoration: underline;
@@ -73,7 +73,6 @@ a:not(.header-title):hover{
   color: #444444;
   font-family: 'IBM Plex Mono';
   font-size: 16px;
-  margin: 0 3px;
 }
 
 /* entry code */

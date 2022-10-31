@@ -24,14 +24,87 @@
             <p class="entry-header-date">2022-09-13</p>        
         </div>
         <div class="entry-paragraph">
+            <p class="entry-paragraph-title">使用 DISM 挂载和编辑镜像</p>
             <p class="entry-paragraph-content">
-                编辑完成之后，须将 install.wim 打包回镜像文件。市面上不乏方便好用的第三方工具，但是对纯净系统的偏执搞得我不得不使用微软自家的方法。
+                所有命令均使用管理员 PowerShell 运行，不过 cmd 应该也行。首先从镜像文件中提取出 efi\source\install.wim，然后运行如下命令挂载。
             </p>
         </div>
         <table class="entry-code">
             <tr class="entry-code-line">
                 <td class="entry-code-line-number">1</td>
-                <td class="entry-code-content">Oscdimg-bootdata:2#p0,e,b<span class="entry-code-highlight">%ETFSBOOT.COM_PATH%</span>#pEF,e,b<span class="entry-code-highlight">%EFISYS.BIN_PATH%</span> -u1 -udfver102 <span class="entry-code-highlight">%MODIFIED_SYSTEM_PATH%</span> <span class="entry-code-highlight">%ISO_PATH%</span></td>
+                <td class="entry-code-content"># Mount-WindowsImage -ImagePath <span class="entry-code-highlight">%WIM_PATH%</span> -Index <span class="entry-code-highlight">%IMAGE_INDEX%</span></td>
+            </tr>
+        </table>
+        <div class="entry-paragraph">
+            <p class="entry-paragraph-content">
+                其中 <span class="entry-paragraph-inline-code">%IMAGE_INDEX%</span> 是系统版本在镜像中的编号，从 1 开始。如在 LTSC 2021 的镜像中，普通版本的编号是 1，IoT 版本则是 2。
+            </p>
+            <p class="entry-paragraph-content">
+                我使用到两个命令，分别是安装应用包（<span class="entry-paragraph-inline-code">Add-AppxProvisionedPackage</span>）和激活可选功能（<span class="entry-paragraph-inline-code">Enable-WindowsOptionalFeature</span>）。
+            </p>
+            <p class="entry-paragraph-content">
+                前者用来安装 App Installer，这个包也包含了 winget。
+            </p>
+            <p class="entry-paragraph-content">
+                使用 adguard 的<a href="https://store.rg-adguard.net/" target="_blank">应用包下载链接生成器</a>得到 App Installer 和其依赖的应用包，并在其 <a href="https://github.com/microsoft/winget-cli/releases/latest" target="_blank">GitHub Repo</a> 下载证书。大部分普通应用包不需要第二步。
+            </p>
+            <p class="entry-paragraph-content">
+                后者用来激活默认关闭的的 Windows 功能，如 Hyper-V。
+            </p>
+            <p class="entry-paragraph-content">
+                使用 <span class="entry-paragraph-inline-code">Get-WindowsOptionalFeature</span> 获得所有功能的别名。
+            </p>
+        </div>
+        <table class="entry-code">
+            <tr class="entry-code-line">
+                <td class="entry-code-line-number">1</td>
+                <td class="entry-code-content"># Get-WindowsOptionalFeature -Online</td>
+            </tr>
+            <tr class="entry-code-line">
+                <td class="entry-code-line-number">2</td>
+                <td class="entry-code-content"></td>
+            </tr>
+            <tr class="entry-code-line">
+                <td class="entry-code-line-number">3</td>
+                <td class="entry-code-content">> ...</td>
+            </tr>
+            <tr class="entry-code-line">
+                <td class="entry-code-line-number">4</td>
+                <td class="entry-code-content">> FeatureName : Microsoft-Windows-Subsystem-Linux</td>
+            </tr>
+            <tr class="entry-code-line">
+                <td class="entry-code-line-number">5</td>
+                <td class="entry-code-content">> State       : Disabled</td>
+            </tr>
+            <tr class="entry-code-line">
+                <td class="entry-code-line-number">6</td>
+                <td class="entry-code-content">> ...</td>
+            </tr>
+        </table>
+        <table class="entry-code">
+            <tr class="entry-code-line">
+                <td class="entry-code-line-number">1</td>
+                <td class="entry-code-content"># Add-AppxProvisionedPackage -Path <span class="entry-code-highlight">%MODIFIED_SYSTEM_PATH%</span> -Folder <span class="entry-code-highlight">%APPX-PATH%</span></td>
+            </tr>
+        </table>
+        <div class="entry-paragraph">
+            <p class="entry-paragraph-content">
+                其中 <span class="entry-paragraph-inline-code">%MODIFIED_SYSTEM_PATH%</span> 是挂载系统的根目录，<span class="entry-paragraph-inline-code">%APPX-PATH%</span> 是包含所有所需文件（应用包本身、依赖和证书）的文件夹。
+            </p>
+        </div>
+        <div class="entry-paragraph">
+            <p class="entry-paragraph-title">使用 Oscdimg 打包镜像</p>
+            <p class="entry-paragraph-content">
+                编辑完成之后，须将 install.wim 打包回镜像文件。市面上不乏方便好用的第三方工具，但是对纯净系统的偏执搞得我不得不使用微软自家的方法。
+            </p>
+            <p class="entry-paragraph-content">
+                在<a href="https://learn.microsoft.com/en-us/windows-hardware/get-started/adk-install">这里</a>下载 Windows ADK 和 Windows PE 插件，然后运行 Deployment and Imaging Tools Environment，就可以使用 Oscdimg。当然，在其他路径直接唤起 oscdimg.exe 也是可以的。打包命令如下。
+            </p>
+        </div>
+        <table class="entry-code">
+            <tr class="entry-code-line">
+                <td class="entry-code-line-number">1</td>
+                <td class="entry-code-content">$ Oscdimg-bootdata:2#p0,e,b<span class="entry-code-highlight">%ETFSBOOT.COM_PATH%</span>#pEF,e,b<span class="entry-code-highlight">%EFISYS.BIN_PATH%</span> -u1 -udfver102 <span class="entry-code-highlight">%MODIFIED_SYSTEM_PATH%</span> <span class="entry-code-highlight">%ISO_PATH%</span></td>
             </tr>
         </table>
         <div class="entry-paragraph">
@@ -45,7 +118,7 @@
         <table class="entry-code">
             <tr class="entry-code-line">
                 <td class="entry-code-line-number">1</td>
-                <td class="entry-code-content">Oscdimg -bootdata:2#p0,e,b“D:\Windows\boot\etfsboot.com”#pEF,e,b“D:\Windows\efi\microsoft\boot\efisys.bin” -u1 -udfver102 “D:\Windows” “D:\Windows.iso”</td>
+                <td class="entry-code-content">$ Oscdimg -bootdata:2#p0,e,b“D:\Windows\boot\etfsboot.com”#pEF,e,b“D:\Windows\efi\microsoft\boot\efisys.bin” -u1 -udfver102 “D:\Windows” “D:\Windows.iso”</td>
             </tr>
         </table>
         <div class="entry-paragraph">
