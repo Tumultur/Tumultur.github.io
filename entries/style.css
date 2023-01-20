@@ -33,7 +33,7 @@ header{
 main{
   width: 600px;
   min-width: 60%;
-  max-width: 80%;
+  max-width: 100%;
   margin: auto;
   padding: 15px;
 }

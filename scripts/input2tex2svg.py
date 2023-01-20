@@ -3,8 +3,9 @@ import sys
 
 tex_header = r'''\documentclass[varwidth=8in,12pt]{standalone}
 \usepackage{amsmath}
-\usepackage{stix}
+\usepackage{siunitx}
 \usepackage{tcolorbox}
+\usepackage[version=4]{mhchem}
 \begin{document}
 \makebox[8in]{$
 '''
