@@ -5,6 +5,11 @@ body {
   font-family: 'IBM Plex', "Helvetica Neue", Helvetica, Arial, "Microsoft Yahei";
   font-weight: 400;
   font-size: 18px;
+  text-align: justify;
+  text-justify: inter-word;
+  -ms-hyphens: auto;
+  -webkit-hyphens: auto;
+  hyphens: auto;
 }
 
 /* header */

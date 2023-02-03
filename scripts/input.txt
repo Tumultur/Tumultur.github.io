@@ -1,15 +1,60 @@
 startsection
 entrytitlesection
-对个人博客内容的思考
+Editing and repacking Windows images
 2022-11-09
 
 startsection
 paragraphsection
-前段时间我心血来潮想写博客，于是学了点 CSS 和 HTML，搭了个小网站。模板完成之后，我便陷入一个新难题：可以写的东西，实在是太少了。
-我自认为算是比较爱折腾的人。收藏番剧、收集 Windows 镜像、写点小脚本、自学 Adobe 套装、研究游戏里各种机制和公式，如此这般。虽说派不上什么用场，至少是消磨时间的好方法。久而久之，也积攒了一些经验之谈。
-可惜就像所罗门王所说，已有的事后必再有，已行的事后必再行，日光之下并无新事。我写下的这些东西，其实不过是互联网另一个角落某篇文章的子集而已。
-就拿《编辑和重打包 Windows 镜像》为例，这种简单的修改完全可以用现成的工具来完成：如 DISM++ 和 MSMG Tools，免费好用、一键操作，比自己看文档来得方便许多。我之所以自愿绕远路，纯粹是出于享受“Do It Yourself”带来的快乐，是完全不顾效率的做法。
-好为人师的心理，我想大家或多或少都有一点。从正面角度来看，愿意分享知识是好事情；但这也取决于知识本身是否准确。
-好比说，读者朋友大概也不一定知道上述这些工具的存在。如果没有我这篇东西，或许您在某个无聊的日子会去搜索“如何修改 Windows 镜像”，并找到这些更优秀、更方便的方法。
-然而读完这篇文章之后，或许您会觉得 DISM 就是最好的解决方案，而懒于搜索其他方法。如此这般，我满足了自己好为人师的心理，却是在误人子弟了。
-写到这里，我突然醒悟：折腾这几天，浪费许多小时，实际上一点意义也没有。然而，在这之后折腾之恶魔还会引诱我跳进一个又一个深坑的吧。
+titlesection
+caonima
+All commands are executed in elevated PowerShell, but Command Prompt should do as well. [efi\source\install.wim] is first extracted from the .iso file, and mounted using the following command.
+
+startsection
+codesection
+Mount-WindowsImage -ImagePath [%WIM_PATH%] -Index [%IMAGE_INDEX%]
+
+startsection
+paragraphsection
+In which [%IMAGE_INDEX%] is the order of the system in the image, counted from 1. For example, in LTSC 2021, the normal variant is numbered 1, and the IoT variant 2.
+Two commands are used: [Add-AppxProvisionedPackage] to install application package and [Enable-WindowsOptionalFeature] to enable optional features.
+The former is used to install App Installer, which already includes winget.
+adguard's <a href="https://store.rg-adguard.net/" target=_blank>link generator</a> can be used to generate download link for the application and its dependencies. Respective certificates can be downloaded from winget's GitHub Repo. Most applications don't require a certificate.
+
+startsection
+codesection
+Add-AppxProvisionedPackage -Path [%MODIFIED_SYSTEM_PATH%] -Folder [%APPX-PATH%]
+
+startsection
+paragraphsection
+In which [%MODIFIED_SYSTEM_PATH%] is the root directory of mounted system, and [%APPX-PATH%] is a folder containing all required files (application package itself, dependencies and certificate).
+The latter is used to enable optional features that are disabled by default e.g. WSL and Hyper-V.
+[Get-WindowsOptionalFeature] can be used to obtain alias for desired feature.
+
+startsection
+codesection
+Get-WindowsOptionalFeature -Online
+
+...
+FeatureName : Microsoft-Windows-Subsystem-Linux
+State : Disabled
+...
+
+startsection
+codesection
+Enable-WindowsOptionalFeature -Path [%MODIFIED_SYSTEM_PATH%] -FeatureName [%FEATURE%] -All
+
+startsection
+paragraphsection
+The option [-All] will automatically install all prerequisite features. Notice that for features that are not included in Windows e.g. .NET Framework 3.5, option [-Source] is required to provide an offline source (located in [sources\sxs] folder in the mounted system) which is nominated as the only valid source by the option [-LimitedAccess.]
+
+startsection
+codesection
+Enable-WindowsOptionalFeature -Path "D:\Windows" -FeatureName NetFx3 -All -LimitAccess -Source "D:\Windows\sources\sxs"
+
+startsection
+paragraphsection
+Finally, commit changes and save the image.
+
+startsection
+codesection
+Dismount-WindowsImage -Path "D:\Windows" -Save
