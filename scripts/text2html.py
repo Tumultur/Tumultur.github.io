@@ -54,6 +54,15 @@ def conv_html(input_lines, input_type='p'):
             input_lines = input_lines[2:]
         
         for line in input_lines:
+            # acronyms
+            line = re.sub(r'\(([A-Z]{3,})\)', r'<abbr>'+r'\1'+r'</abbr>', line)
+
+            # hyperlinks
+            line = re.sub(r'\{((.(?!\{))*)\}\{((.(?!\{))*)\}', r'<a href="\1" target=_blank>\3</a>', line)
+
+            # spacing in parentheses
+            line = re.sub(r'\(((.(?!\())*)\)', r'(<span style="display: inline-block; width: 1.5px"></span>\1<span style="display: inline-block; width: 1.5px"></span>)', line)
+
             # inline code block
             line = re.sub(r'\[((.(?!\[))*)\]', r'<span class="entry-paragraph-inline-code">'+r'\1'+r'</span>', line)
 

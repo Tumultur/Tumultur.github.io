@@ -26,7 +26,7 @@
         <div class="entry-paragraph">
             <p class="entry-paragraph-title">caonima</p>
             <p class="entry-paragraph-content">
-                All commands are executed in elevated PowerShell, but Command Prompt should do as well. <span class="entry-paragraph-inline-code">efi\source\install.wim</span> is first extracted from the .iso file, and mounted using the following command.
+                All commands are executed in elevated PowerShell, but Command Prompt should suffice. <span class="entry-paragraph-inline-code">efi\source\install.wim</span> is first extracted from the .iso file, and mounted using the following command.
             </p>
         </div>
         <table class="entry-code">
@@ -37,16 +37,13 @@
         </table>
         <div class="entry-paragraph">
             <p class="entry-paragraph-content">
-                In which <span class="entry-paragraph-inline-code">%IMAGE_INDEX%</span> is the order of the system in the image, counted from 1. For example, in LTSC 2021, the normal variant is numbered 1, and the IoT variant is 2.
+                In which <span class="entry-paragraph-inline-code">%IMAGE_INDEX%</span> is the order of the system in the image, starting from 1. For example, in <abbr>LTSC</abbr> 2021, the normal variant is numbered 1, and the IoT variant 2.
             </p>
             <p class="entry-paragraph-content">
-                Two commands are used: <span class="entry-paragraph-inline-code">Add-AppxProvisionedPackage</span> to install application package and <span class="entry-paragraph-inline-code">Enable-WindowsOptionalFeature</span> to enable optional features.
+                Two commands are used in this article: <span class="entry-paragraph-inline-code">Add-AppxProvisionedPackage</span> to install application packages and <span class="entry-paragraph-inline-code">Enable-WindowsOptionalFeature</span> to enable optional features. The former is used to install App Installer, which already includes winget.
             </p>
             <p class="entry-paragraph-content">
-                The former is used to install App Installer, which already includes winget.
-            </p>
-            <p class="entry-paragraph-content">
-                adguard's <a href="https://store.rg-adguard.net/" target=_blank>line generator</a> can be used to generate download link for the application and its dependencies. Respective certificates can be downloaded from winget's GitHub Repo. A certificate is not required by most applications.
+                <a href="https://store.rg-adguard.net/" target=_blank>Microsoft Store Generation Project</a> by adguard can be used to generate download link for the application package and its dependencies. Respective certificates can be downloaded from winget's GitHub Repo. This is however unnecessary for most application.
             </p>
         </div>
         <table class="entry-code">
@@ -57,7 +54,7 @@
         </table>
         <div class="entry-paragraph">
             <p class="entry-paragraph-content">
-                In which <span class="entry-paragraph-inline-code">%MODIFIED_SYSTEM_PATH%</span> is the root directory of mounted system, and <span class="entry-paragraph-inline-code">%APPX-PATH%</span> is a folder containing all required files (application package itself, dependencies and certificate).
+                In which <span class="entry-paragraph-inline-code">%MODIFIED_SYSTEM_PATH%</span> is the root directory of mounted system, and <span class="entry-paragraph-inline-code">%APPX-PATH%</span> is a folder containing all required files (<span style="display: inline-block; width: 1.5px"></span>application package itself, dependencies and certificate<span style="display: inline-block; width: 1.5px"></span>).
             </p>
             <p class="entry-paragraph-content">
                 The latter is used to enable optional features that are disabled by default e.g. WSL and Hyper-V.
@@ -96,7 +93,7 @@
         </table>
         <div class="entry-paragraph">
             <p class="entry-paragraph-content">
-                The option <span class="entry-paragraph-inline-code">-All</span> will automatically install all prerequisite features. Notice that for features that are not included in Windows e.g. .NET Framework 3.5, option <span class="entry-paragraph-inline-code">-Source</span> is required to provide an offline source (located in <span class="entry-paragraph-inline-code">sources\sxs</span> folder in the mounted system) which is nominated as the only valid source by the option <span class="entry-paragraph-inline-code">-LimitedAccess.</span>
+                The option <span class="entry-paragraph-inline-code">-All</span> will automatically install all prerequisite features. Notice that for features that are not included in Windows, for example .NET Framework 3.5, option <span class="entry-paragraph-inline-code">-Source</span> is required to provide an offline source (<span style="display: inline-block; width: 1.5px"></span>located in <span class="entry-paragraph-inline-code">sources\sxs</span> folder in the mounted system<span style="display: inline-block; width: 1.5px"></span>) which is nominated as the only valid source by the option <span class="entry-paragraph-inline-code">-LimitedAccess.</span>
             </p>
         </div>
         <table class="entry-code">

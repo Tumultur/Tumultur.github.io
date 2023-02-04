@@ -2,14 +2,19 @@ body {
   margin: 0;
   padding: 0;
   line-height: 1.2;
-  font-family: 'IBM Plex', "Helvetica Neue", Helvetica, Arial, "Microsoft Yahei";
+  font-family: 'Segoe UI', "Helvetica Neue", Helvetica, Arial, "Microsoft Yahei";
   font-weight: 400;
   font-size: 18px;
+  font-variant-numeric: oldstyle-nums proportional-nums;
   text-align: justify;
   text-justify: inter-word;
   -ms-hyphens: auto;
   -webkit-hyphens: auto;
   hyphens: auto;
+}
+
+abbr {
+  font-variant-caps: all-small-caps;
 }
 
 /* header */
@@ -20,6 +25,7 @@ header{
   padding: 10px;
 }
 .header-title{
+  text-decoration: none;
   color: #FFF;
   font-size: 32px;
 }
@@ -46,7 +52,7 @@ main{
 /* hyperlink */
 a{
   text-decoration: none;
-  color: #666;
+  color: #606060;
 }
 a:not(.header-title):hover{
   text-decoration: underline;
@@ -73,12 +79,12 @@ a:not(.header-title):hover{
   margin-bottom: 12px;
 }
 .entry-paragraph-inline-code{
-  color: #444444;
-  font-family: 'IBM Plex Mono';
-  font-size: 16px;
+  color: #606060;
+  font-family: 'Consolas';
+  font-size: 18px;
 }
 
-/* entry code */
+/* code block */
 .entry-code{
     background-color: #f0f0f0;
     width: 100%;
@@ -94,7 +100,7 @@ a:not(.header-title):hover{
 .entry-code *{
     color: #484848;
     font-size: 16px;
-    font-family: 'IBM Plex Mono', 'Microsoft Yahei' !important;
+    font-family: 'Consolas', 'Microsoft Yahei' !important;
     font-feature-settings: 'zero';
 }
 .entry-code-line-number{
@@ -109,6 +115,7 @@ a:not(.header-title):hover{
   color: #999999
 }
 
+/* image and formula */
 .entry-image-content{
   display: block;
   margin-left: auto;
