@@ -1,7 +1,8 @@
 import re
 import shutil
 
-entry_name = 'rant'
+entry_name = 'kindle'
+cjk = True
 input_filename = 'd:/miscellaneous/personal/code/frontend/git/scripts/input.txt'
 header_filename = 'd:/miscellaneous/personal/code/frontend/git/scripts/header.txt'
 output_filename = 'd:/miscellaneous/personal/code/frontend/git/scripts/output.txt'
@@ -54,8 +55,12 @@ def conv_html(input_lines, input_type='p'):
             input_lines = input_lines[2:]
         
         for line in input_lines:
+            # CJK & Latin spacing
+            # line = re.sub(r'([\u4e00-\u9fa5]) ([a-zA-Z0-9 ]+) ([\u4e00-\u9fa5])', r'\1&#x2005;\2&#x2005;\3', line)
+            # line = re.sub(r'([\u4e00-\u9fa5]) ([a-zA-Z0-9 ]+)([。、，；])', r'\1&#x2005;\2\3', line)
+
             # acronyms
-            line = re.sub(r'\(([A-Z]{3,})\)', r'<abbr>'+r'\1'+r'</abbr>', line)
+            line = re.sub(r'\(([A-Z]+)\)', r'<abbr>'+r'\1'+r'</abbr>', line)
 
             # hyperlinks
             line = re.sub(r'\{((.(?!\{))*)\}\{((.(?!\{))*)\}', r'<a href="\1" target=_blank>\3</a>', line)

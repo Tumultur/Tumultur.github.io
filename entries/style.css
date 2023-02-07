@@ -5,17 +5,17 @@ body {
   font-family: 'Segoe UI', "Helvetica Neue", Helvetica, Arial, "Microsoft Yahei";
   font-weight: 400;
   font-size: 18px;
-  font-variant-numeric: oldstyle-nums proportional-nums;
-  text-align: justify;
+  /* font-variant-numeric: oldstyle-nums proportional-nums; */
+  /* text-align: justify; */
   text-justify: inter-word;
   -ms-hyphens: auto;
   -webkit-hyphens: auto;
   hyphens: auto;
 }
 
-abbr {
+/* abbr {
   font-variant-caps: all-small-caps;
-}
+} */
 
 /* header */
 header{
@@ -102,11 +102,13 @@ a:not(.header-title):hover{
     font-size: 16px;
     font-family: 'Consolas', 'Microsoft Yahei' !important;
     font-feature-settings: 'zero';
+    font-variant-numeric: normal;
 }
 .entry-code-line-number{
     text-align: center;
     vertical-align: top;
     width: 24px;
+    font-variant-numeric: proportional-nums oldstyle-nums;
 }
 .entry-code-content{
   word-wrap: break-word;

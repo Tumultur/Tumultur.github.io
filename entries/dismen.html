@@ -26,7 +26,7 @@
         <div class="entry-paragraph">
             <p class="entry-paragraph-title">caonima</p>
             <p class="entry-paragraph-content">
-                All commands are executed in elevated PowerShell, but Command Prompt should suffice. <span class="entry-paragraph-inline-code">efi\source\install.wim</span> is first extracted from the .iso file, and mounted using the following command.
+                All commands are executed in elevated PowerShell, Command Prompt should suffice but is untested. <span class="entry-paragraph-inline-code">efi\source\install.wim</span> is first extracted from the .iso file, then mounted using the following command.
             </p>
         </div>
         <table class="entry-code">
@@ -37,13 +37,21 @@
         </table>
         <div class="entry-paragraph">
             <p class="entry-paragraph-content">
-                In which <span class="entry-paragraph-inline-code">%IMAGE_INDEX%</span> is the order of the system in the image, starting from 1. For example, in <abbr>LTSC</abbr> 2021, the normal variant is numbered 1, and the IoT variant 2.
+                In which <span class="entry-paragraph-inline-code">%IMAGE_INDEX%</span> is the order of the system in the image, obtained from the following command:
             </p>
+        </div>
+        <table class="entry-code">
+            <tr class="entry-code-line">
+                <td class="entry-code-line-number">1</td>
+                <td class="entry-code-content">dism /Get-WimInfo /WimFile:<span class="entry-code-highlight">%WIM_PATH%</span></td>
+            </tr>
+        </table>
+        <div class="entry-paragraph">
             <p class="entry-paragraph-content">
                 Two commands are used in this article: <span class="entry-paragraph-inline-code">Add-AppxProvisionedPackage</span> to install application packages and <span class="entry-paragraph-inline-code">Enable-WindowsOptionalFeature</span> to enable optional features. The former is used to install App Installer, which already includes winget.
             </p>
             <p class="entry-paragraph-content">
-                <a href="https://store.rg-adguard.net/" target=_blank>Microsoft Store Generation Project</a> by adguard can be used to generate download link for the application package and its dependencies. Respective certificates can be downloaded from winget's GitHub Repo. This is however unnecessary for most application.
+                <a href="https://store.rg-adguard.net/" target=_blank>Microsoft Store Generation Project</a> by adguard can be used to generate download link for the application package and its dependencies. Respective certificates can be downloaded from <a href="https://github.com/microsoft/winget-cli/releases" target=_blank>winget's GitHub Repo</a>. The latter part is however unnecessary for most application.
             </p>
         </div>
         <table class="entry-code">
@@ -54,10 +62,10 @@
         </table>
         <div class="entry-paragraph">
             <p class="entry-paragraph-content">
-                In which <span class="entry-paragraph-inline-code">%MODIFIED_SYSTEM_PATH%</span> is the root directory of mounted system, and <span class="entry-paragraph-inline-code">%APPX-PATH%</span> is a folder containing all required files (<span style="display: inline-block; width: 1.5px"></span>application package itself, dependencies and certificate<span style="display: inline-block; width: 1.5px"></span>).
+                In which <span class="entry-paragraph-inline-code">%MODIFIED_SYSTEM_PATH%</span> is the root directory of mounted system, and <span class="entry-paragraph-inline-code">%APPX-PATH%</span> a folder containing all required files (<span style="display: inline-block; width: 1.5px"></span>the application package itself, dependencies and certificate<span style="display: inline-block; width: 1.5px"></span>).
             </p>
             <p class="entry-paragraph-content">
-                The latter is used to enable optional features that are disabled by default e.g. WSL and Hyper-V.
+                The latter command is used to enable optional features that are disabled by default, for example <abbr>WSL</abbr> and Hyper-V.
             </p>
             <p class="entry-paragraph-content">
                 <span class="entry-paragraph-inline-code">Get-WindowsOptionalFeature</span> can be used to obtain alias for desired feature.
@@ -93,25 +101,25 @@
         </table>
         <div class="entry-paragraph">
             <p class="entry-paragraph-content">
-                The option <span class="entry-paragraph-inline-code">-All</span> will automatically install all prerequisite features. Notice that for features that are not included in Windows, for example .NET Framework 3.5, option <span class="entry-paragraph-inline-code">-Source</span> is required to provide an offline source (<span style="display: inline-block; width: 1.5px"></span>located in <span class="entry-paragraph-inline-code">sources\sxs</span> folder in the mounted system<span style="display: inline-block; width: 1.5px"></span>) which is nominated as the only valid source by the option <span class="entry-paragraph-inline-code">-LimitedAccess.</span>
+                The option <span class="entry-paragraph-inline-code">-All</span> will automatically install all prerequisite features. Notice that for features that are not included in Windows, for example .NET Framework 3.5, option <span class="entry-paragraph-inline-code">-Source</span> is required to provide an offline source (<span style="display: inline-block; width: 1.5px"></span>located in <span class="entry-paragraph-inline-code">sources\sxs</span> folder in the mounted system<span style="display: inline-block; width: 1.5px"></span>) which is nominated as the only valid source by the option <span class="entry-paragraph-inline-code">-LimitedAccess.</span> Finally, commit changes and save the image.
             </p>
         </div>
         <table class="entry-code">
             <tr class="entry-code-line">
                 <td class="entry-code-line-number">1</td>
-                <td class="entry-code-content">Enable-WindowsOptionalFeature -Path "D:\Windows" -FeatureName NetFx3 -All -LimitAccess -Source "D:\Windows\sources\sxs"</td>
+                <td class="entry-code-content">Enable-WindowsOptionalFeature -Path <span class="entry-code-highlight">%MODIFIED_SYSTEM_PATH%</span> -FeatureName NetFx3 -All -LimitAccess -Source <span class="entry-code-highlight">%FEATURE_PACKAGE_PATH%</span></td>
+            </tr>
+        </table>
+        <table class="entry-code">
+            <tr class="entry-code-line">
+                <td class="entry-code-line-number">1</td>
+                <td class="entry-code-content">Dismount-WindowsImage -Path <span class="entry-code-highlight">%MODIFIED_SYSTEM_PATH%</span> -Save</td>
             </tr>
         </table>
         <div class="entry-paragraph">
             <p class="entry-paragraph-content">
-                Finally, commit changes and save the image.
+                A more comprehensive documentation can be found at <a href="https://learn.microsoft.com/en-us/powershell/module/dism/?view=windowsserver2022-ps" target=_blank>Microsoft Learn.</a> This article is but a minimal guide compiled from said documentation, and validity cannot be guaranteed.
             </p>
         </div>
-        <table class="entry-code">
-            <tr class="entry-code-line">
-                <td class="entry-code-line-number">1</td>
-                <td class="entry-code-content">Dismount-WindowsImage -Path "D:\Windows" -Save</td>
-            </tr>
-        </table>
     </main>
 </body>

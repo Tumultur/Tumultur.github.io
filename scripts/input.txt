@@ -1,59 +1,12 @@
 startsection
 entrytitlesection
-Editing and repacking Windows images
-2022-11-09
+购入 Kindle 后的一些记录
+2023-02-03
 
 startsection
 paragraphsection
-titlesection
-caonima
-All commands are executed in elevated PowerShell, but Command Prompt should suffice. [efi\source\install.wim] is first extracted from the .iso file, and mounted using the following command.
-
-startsection
-codesection
-Mount-WindowsImage -ImagePath [%WIM_PATH%] -Index [%IMAGE_INDEX%]
-
-startsection
-paragraphsection
-In which [%IMAGE_INDEX%] is the order of the system in the image, starting from 1. For example, in (LTSC) 2021, the normal variant is numbered 1, and the IoT variant 2.
-Two commands are used in this article: [Add-AppxProvisionedPackage] to install application packages and [Enable-WindowsOptionalFeature] to enable optional features. The former is used to install App Installer, which already includes winget.
-{https://store.rg-adguard.net/}{Microsoft Store Generation Project} by adguard can be used to generate download link for the application package and its dependencies. Respective certificates can be downloaded from winget's GitHub Repo. This is however unnecessary for most application.
-
-startsection
-codesection
-Add-AppxProvisionedPackage -Path [%MODIFIED_SYSTEM_PATH%] -Folder [%APPX-PATH%]
-
-startsection
-paragraphsection
-In which [%MODIFIED_SYSTEM_PATH%] is the root directory of mounted system, and [%APPX-PATH%] is a folder containing all required files (application package itself, dependencies and certificate).
-The latter is used to enable optional features that are disabled by default e.g. WSL and Hyper-V.
-[Get-WindowsOptionalFeature] can be used to obtain alias for desired feature.
-
-startsection
-codesection
-Get-WindowsOptionalFeature -Online
-
-...
-FeatureName : Microsoft-Windows-Subsystem-Linux
-State : Disabled
-...
-
-startsection
-codesection
-Enable-WindowsOptionalFeature -Path [%MODIFIED_SYSTEM_PATH%] -FeatureName [%FEATURE%] -All
-
-startsection
-paragraphsection
-The option [-All] will automatically install all prerequisite features. Notice that for features that are not included in Windows, for example .NET Framework 3.5, option [-Source] is required to provide an offline source (located in [sources\sxs] folder in the mounted system) which is nominated as the only valid source by the option [-LimitedAccess.]
-
-startsection
-codesection
-Enable-WindowsOptionalFeature -Path "D:\Windows" -FeatureName NetFx3 -All -LimitAccess -Source "D:\Windows\sources\sxs"
-
-startsection
-paragraphsection
-Finally, commit changes and save the image.
-
-startsection
-codesection
-Dismount-WindowsImage -Path "D:\Windows" -Save
+去年黑五花 180 镑购入了 Kindle Oasis 3。我平时读书并不太多，算是冲动消费了。不过既然已经花了钱，还是打算好好用一下再说。
+阅读 PDF 的体验只能用非常糟糕来形容：向前翻页时延迟相当明显，向后翻页则需等待五到十秒。缩放非常不便，也不能使用连续滚动。当然这情有可原，毕竟 PDF 本来就不是 Kindle 的专项。很好奇国产阵营的阅读器会不会拥有更好的支持。
+正版电子书实在太过昂贵，不得已只能手动导入文件。可惜常用的 EPUB 格式不支持 advanced typesetting，因此缺失 hyphenation 和 ragged alignment，也不能加载电子书自带的字体，根本无法正常阅读。好在可以使用 Calibre 的 {https://www.mobileread.com/forums/showthread.php?t=272407}{KFX Output} 插件将文件转换成支持上述特性的 KFX 格式，然后有线导入。导入时似乎必须使用 Calibre 并手动选择格式，否则要么封面无法显示，要么仍不支持 advanced typesetting。
+虽说 Oasis 被认为是续航较差的型号，但满足我的需求已绰绰有余；大概是因为眼睛不怎么敏感，又戴着防蓝光眼镜，网上说的阴阳屏我也没有发觉。唯一美中不足是如今实在显得有些落后的 Micro USB，只为单个设备多准备一根充电线的感觉并不太好。也有点想念 Voyage 的压感式翻页按钮，那恰到好处的振动反馈真是无与伦比的美好体验。
+话说我初中时曾偷偷拿家里的 Kindle 上网。记得浏览器的键盘反应极慢，打个长点的网址都要花一两分钟；贴吧界面是所谓的“极速版”，也就是最古老的界面，读者如果感兴趣可以去 {https://web.archive.org/web/20060613093047/http://tieba.baidu.com/f?ct=486539264&cm=58580&tn=baiduForumIndex}{Wayback Machine} 看一看。如今回忆起来，实在是很佩服自己当年的毅力。

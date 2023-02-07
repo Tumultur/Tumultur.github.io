@@ -5,12 +5,12 @@ body {
   font-family: "Segoe UI", "Microsoft Yahei";
   font-weight: 400;
   font-size: 18px;
-  font-variant-numeric: oldstyle-nums proportional-nums;
+  /* font-variant-numeric: oldstyle-nums proportional-nums; */
 }
 
-abbr {
+/* abbr {
   font-variant-caps: all-small-caps;
-}
+} */
 
 /* header */
 header{
@@ -57,8 +57,10 @@ a:hover{
 }
 
 /* description */
-.description p{
-  margin: 0;
+.description {
+  margin-top: 15px;
+  text-align: center;
+  color: #888888;
 }
 
 /* module */
