@@ -3,8 +3,13 @@ import shutil
 
 entry_name = 'kindle'
 cjk = True
+
 input_filename = 'd:/miscellaneous/personal/code/frontend/git/scripts/input.txt'
-header_filename = 'd:/miscellaneous/personal/code/frontend/git/scripts/header.txt'
+
+if cjk == False:
+    header_filename = 'd:/miscellaneous/personal/code/frontend/git/scripts/header.txt'
+else:
+    header_filename = 'd:/miscellaneous/personal/code/frontend/git/scripts/cjk_header.txt'
 output_filename = 'd:/miscellaneous/personal/code/frontend/git/scripts/output.txt'
 output_html = 'd:/miscellaneous/personal/code/frontend/git/entries/'+entry_name+'.html'
 

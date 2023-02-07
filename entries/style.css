@@ -2,20 +2,15 @@ body {
   margin: 0;
   padding: 0;
   line-height: 1.2;
-  font-family: 'Segoe UI', "Helvetica Neue", Helvetica, Arial, "Microsoft Yahei";
+  font-family: 'Segoe UI', "SF Pro", "Helvetica Neue", Helvetica, Arial, "Microsoft Yahei";
   font-weight: 400;
   font-size: 18px;
-  /* font-variant-numeric: oldstyle-nums proportional-nums; */
   /* text-align: justify; */
   text-justify: inter-word;
   -ms-hyphens: auto;
   -webkit-hyphens: auto;
   hyphens: auto;
 }
-
-/* abbr {
-  font-variant-caps: all-small-caps;
-} */
 
 /* header */
 header{

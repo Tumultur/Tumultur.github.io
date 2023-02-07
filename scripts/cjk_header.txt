@@ -10,10 +10,6 @@
     <link rel="stylesheet" href="../fonts/ibm_plex/IBM_Plex.css">
     <link rel="stylesheet" href="../fonts/ibm_plex_mono/IBM_Plex.css">
     <link rel="icon" href="../focus.png">
-    <style>
-      body {font-variant-numeric: oldstyle-nums proportional-nums;}
-      abbr {font-variant-caps: all-small-caps;}
-    </style>
 </head>
 <body>
     <header style="background-color: #23507f;">
