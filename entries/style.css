@@ -2,7 +2,7 @@ body {
   margin: 0;
   padding: 0;
   line-height: 1.2;
-  font-family: 'Segoe UI', "SF Pro", "Helvetica Neue", Helvetica, Arial, 'Microsoft Yahei', sans-serif;
+  font-family: 'Segoe UI', 'PingFang SC', 'Microsoft Yahei', sans-serif;
   font-weight: 400;
   font-size: 18px;
   /* text-align: justify; */
@@ -75,7 +75,7 @@ a:not(.header-title):hover{
 }
 .entry-paragraph-inline-code{
   color: #606060;
-  font-family: 'Consolas', 'Menlo', 'Microsoft Yahei', monospace;
+  font-family: 'Consolas', 'Monaco', 'PingFang SC', 'Microsoft Yahei', monospace;
   font-size: 18px;
 }
 
@@ -95,9 +95,8 @@ a:not(.header-title):hover{
 .entry-code *{
     color: #484848;
     font-size: 16px;
-    font-family: 'Consolas', 'Menlo', 'Microsoft Yahei', monospace;
+    font-family: 'Consolas', 'Monaco', 'PingFang SC', 'Microsoft Yahei', monospace;
     font-feature-settings: 'zero';
-    font-variant-numeric: normal;
 }
 .entry-code-line-number{
     text-align: center;
