@@ -3,6 +3,7 @@ import shutil
 
 entry_name = 'kindle'
 cjk = True
+cjk_quotation_styling = '<span style="font-family: \'PingFang SC\', \'Microsoft Yahei\'">'
 
 input_filename = 'd:/miscellaneous/personal/code/frontend/git/scripts/input.txt'
 
@@ -63,6 +64,10 @@ def conv_html(input_lines, input_type='p'):
             # CJK & Latin spacing
             # line = re.sub(r'([\u4e00-\u9fa5]) ([a-zA-Z0-9 ]+) ([\u4e00-\u9fa5])', r'\1&#x2005;\2&#x2005;\3', line)
             # line = re.sub(r'([\u4e00-\u9fa5]) ([a-zA-Z0-9 ]+)([。、，；])', r'\1&#x2005;\2\3', line)
+
+            # CJK quotation marks
+            if cjk == True:
+                line = re.sub(r'“((.(?!“))*)”', cjk_quotation_styling+r'“</span>'+r'\1'+cjk_quotation_styling+r'”</span>', line)
 
             # acronyms
             line = re.sub(r'\(([A-Z]+)\)', r'<abbr>'+r'\1'+r'</abbr>', line)
