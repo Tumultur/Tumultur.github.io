@@ -1,6 +1,6 @@
 @font-face {
   font-family: "Chinese Quotes";
-  src: local('PingFangSC'), local("Microsoft Yahei");
+  src: local('PingFang SC'), local("Microsoft Yahei");
   unicode-range: U+2018-2019, U+201C-201D;
 }
 
