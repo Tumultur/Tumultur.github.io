@@ -1,8 +1,14 @@
+@font-face {
+  font-family: "Chinese Quotes";
+  src: local('PingFangSC'), local("Microsoft Yahei");
+  unicode-range: U+2018-2019, U+201C-201D;
+}
+
 body {
   margin: 0;
   padding: 0;
   line-height: 1.2;
-  font-family: 'SF Pro Text', 'Segoe UI', 'PingFang SC', 'Microsoft Yahei', sans-serif;
+  font-family: 'Chinese Quotes', 'SF Pro Text', 'Segoe UI', 'PingFang SC', 'Microsoft Yahei', sans-serif;
   font-weight: 400;
   font-size: 18px;
   /* text-align: justify; */

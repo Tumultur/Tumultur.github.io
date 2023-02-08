@@ -61,13 +61,20 @@ def conv_html(input_lines, input_type='p'):
             input_lines = input_lines[2:]
         
         for line in input_lines:
-            # CJK & Latin spacing
+            # CJK & Latin spacing, temporarily disabled after switching to ragged right flush left
             # line = re.sub(r'([\u4e00-\u9fa5]) ([a-zA-Z0-9 ]+) ([\u4e00-\u9fa5])', r'\1&#x2005;\2&#x2005;\3', line)
             # line = re.sub(r'([\u4e00-\u9fa5]) ([a-zA-Z0-9 ]+)([。、，；])', r'\1&#x2005;\2\3', line)
 
-            # CJK quotation marks
-            if cjk == True:
-                line = re.sub(r'“((.(?!“))*)”', cjk_quotation_styling+r'“</span>'+r'\1'+cjk_quotation_styling+r'”</span>', line)
+            # CJK quotation marks font, no longer useful as stylesheet will do
+            # if cjk == True:
+            #     line = re.sub(r'“((.(?!“))*)”', cjk_quotation_styling+r'“</span>'+r'\1'+cjk_quotation_styling+r'”</span>', line)
+            #     line = re.sub(r'‘((.(?!‘))*)’', cjk_quotation_styling+r'‘</span>'+r'\1'+cjk_quotation_styling+r'’</span>', line)
+
+            # spacing between CJK quotation marks and other punctuations
+            line = re.sub(r'”([。、，；])', r'<span style="margin-right: -8px">”</span>\1', line)
+
+            # apostrophe, seems to be unnecessary
+            # line = re.sub(r'([a-zA-Z])\'([a-zA-Z]?)', r'\1'+u'\u0027'+r'\2', line)
 
             # acronyms
             line = re.sub(r'\(([A-Z]+)\)', r'<abbr>'+r'\1'+r'</abbr>', line)
