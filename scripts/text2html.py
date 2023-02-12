@@ -4,6 +4,9 @@ import shutil
 entry_name = 'kindle'
 cjk = True
 cjk_quotation_styling = '<span style="font-family: \'PingFang SC\', \'Microsoft Yahei\'">'
+cjk_quotations = r'[。，；：、《（“‘》）”’]'
+latin_quotation_styling = '<span class="quotation-mark">'
+apostrophe_styling = '<span class="apostrophe">'
 
 input_filename = 'd:/miscellaneous/personal/code/frontend/git/scripts/input.txt'
 
@@ -11,6 +14,7 @@ if cjk == False:
     header_filename = 'd:/miscellaneous/personal/code/frontend/git/scripts/header.txt'
 else:
     header_filename = 'd:/miscellaneous/personal/code/frontend/git/scripts/cjk_header.txt'
+
 output_filename = 'd:/miscellaneous/personal/code/frontend/git/scripts/output.txt'
 output_html = 'd:/miscellaneous/personal/code/frontend/git/entries/'+entry_name+'.html'
 
@@ -61,6 +65,10 @@ def conv_html(input_lines, input_type='p'):
             input_lines = input_lines[2:]
         
         for line in input_lines:
+            # apostrophe
+            line = re.sub(r"(?<!')([a-zA-Z])([a-zA-Z]*)'([a-zA-Z])", r'\1\2'+apostrophe_styling+r'’</span>'+r'\3', line)
+            line = re.sub(r'<apos>', r'<span'+apostrophe_styling+r'’</span>', line)
+            
             # CJK & Latin spacing, temporarily disabled after switching to ragged right flush left
             # line = re.sub(r'([\u4e00-\u9fa5]) ([a-zA-Z0-9 ]+) ([\u4e00-\u9fa5])', r'\1&#x2005;\2&#x2005;\3', line)
             # line = re.sub(r'([\u4e00-\u9fa5]) ([a-zA-Z0-9 ]+)([。、，；])', r'\1&#x2005;\2\3', line)
@@ -70,11 +78,24 @@ def conv_html(input_lines, input_type='p'):
             #     line = re.sub(r'“((.(?!“))*)”', cjk_quotation_styling+r'“</span>'+r'\1'+cjk_quotation_styling+r'”</span>', line)
             #     line = re.sub(r'‘((.(?!‘))*)’', cjk_quotation_styling+r'‘</span>'+r'\1'+cjk_quotation_styling+r'’</span>', line)
 
-            # spacing between CJK quotation marks and other punctuations
-            line = re.sub(r'”([。、，；])', r'<span style="margin-right: -8px">”</span>\1', line)
+            # specify font for quotation marks around latin text
+            # disabled, instead use different quotation marks styling for CJK and latin articles
+            # line = re.sub(r'(?<!class=)"([a-zA-Z ]*)"', latin_quotation_styling+r'“</span>'+r'\1'+latin_quotation_styling+r'”</span>', line)
+            # line = re.sub(r"(?<!class=)'([a-zA-Z ]*)'", latin_quotation_styling+r'‘</span>'+r'\1'+latin_quotation_styling+r'’</span>', line)
 
-            # apostrophe, seems to be unnecessary
-            # line = re.sub(r'([a-zA-Z])\'([a-zA-Z]?)', r'\1'+u'\u0027'+r'\2', line)
+            # shits above are mostly useless if Word instead of VSCode is used for writing text
+
+            # CJK punctuation spacing, does not work properly in the case of more than 2 consecutive punctuations 
+            # line = re.sub(r'([”）’])([。、，；（])', r'<span style="margin-right: -9px">\1</span>\2', line)
+            # line = re.sub(r'([。、，；：（])([‘“（’”）])', r'\1<span style="margin-left: -9px">\2</span>', line)
+            # line = re.sub(r'^([‘“（])', r'<span style="margin-left: -18px">\1</span>', line)
+
+            # ultimate solution: reduce spacing for all characters in a series of consecutive punctuations, except the last one
+            while True:
+                subbed_line = re.sub(r'('+cjk_quotations+r')('+cjk_quotations+r')', r'<span style="margin-right: -9px">\1</span>\2', line)
+                if subbed_line == line:
+                    break
+                line = subbed_line
 
             # acronyms
             line = re.sub(r'\(([A-Z]+)\)', r'<abbr>'+r'\1'+r'</abbr>', line)
@@ -99,6 +120,16 @@ def conv_html(input_lines, input_type='p'):
                 +'</p>\n'
             )
         output_lines.append(' '*8+'</div>\n')
+
+    # image
+    elif input_type == 'i':
+        output_lines.append(
+            ' '*8+'<div class="entry-image-content">\n'
+            +' '*12+'<img src="'
+            +input_lines[0]
+            +'">\n'
+            +' '*8+'</div>\n'
+        )
 
     # entry title
     elif input_type == 't':

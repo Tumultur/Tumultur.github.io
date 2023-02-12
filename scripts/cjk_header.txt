@@ -10,6 +10,9 @@
     <link rel="stylesheet" href="../fonts/ibm_plex/IBM_Plex.css">
     <link rel="stylesheet" href="../fonts/ibm_plex_mono/IBM_Plex.css">
     <link rel="icon" href="../focus.png">
+    <style>
+      body {font-family: 'Chinese Quotes', 'SF Pro Text', 'Segoe UI', 'PingFang SC', 'Microsoft Yahei', sans-serif !important;}
+    </style>
 </head>
 <body>
     <header style="background-color: #23507f;">
