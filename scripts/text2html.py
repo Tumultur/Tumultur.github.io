@@ -1,22 +1,26 @@
 import re
 import shutil
+import os
 
 entry_name = 'kindle'
 cjk = True
+cjk_range = r'\u2e80-\u2eff\u2f00-\u2fdf\u3040-\u309f\u30a0-\u30fa\u30fc-\u30ff\u3100-\u312f\u3200-\u32ff\u3400-\u4dbf\u4e00-\u9fff\uf900-\ufaff'
 cjk_quotation_styling = '<span style="font-family: \'PingFang SC\', \'Microsoft Yahei\'">'
 cjk_quotations = r'[。，；：、《（“‘》）”’]'
 latin_quotation_styling = '<span class="quotation-mark">'
 apostrophe_styling = '<span class="apostrophe">'
 
-input_filename = 'd:/miscellaneous/personal/code/frontend/git/scripts/input.txt'
+script_dir = 'd:/miscellaneous/personal/code/frontend/git/scripts/'
+entries_dir = 'd:/miscellaneous/personal/code/frontend/git/entries/'
+
+input_filename = script_dir+'input.txt'
+original_text_dir = entries_dir+'original/'
+output_html = entries_dir+entry_name+'.html'
 
 if cjk == False:
-    header_filename = 'd:/miscellaneous/personal/code/frontend/git/scripts/header.txt'
+    header_filename = script_dir+'header.txt'
 else:
-    header_filename = 'd:/miscellaneous/personal/code/frontend/git/scripts/cjk_header.txt'
-
-output_filename = 'd:/miscellaneous/personal/code/frontend/git/scripts/output.txt'
-output_html = 'd:/miscellaneous/personal/code/frontend/git/entries/'+entry_name+'.html'
+    header_filename = script_dir+'cjk_header.txt'
 
 def conv_html(input_lines, input_type='p'):
     # omit type identifier
@@ -66,12 +70,13 @@ def conv_html(input_lines, input_type='p'):
         
         for line in input_lines:
             # apostrophe
-            line = re.sub(r"(?<!')([a-zA-Z])([a-zA-Z]*)'([a-zA-Z])", r'\1\2'+apostrophe_styling+r'’</span>'+r'\3', line)
+            line = re.sub(r"(?<!')([a-zA-Z])([a-zA-Z]*)'([a-zA-Z]+)", r'\1\2'+apostrophe_styling+r'’</span>'+r'\3', line)
             line = re.sub(r'<apos>', r'<span'+apostrophe_styling+r'’</span>', line)
             
-            # CJK & Latin spacing, temporarily disabled after switching to ragged right flush left
-            # line = re.sub(r'([\u4e00-\u9fa5]) ([a-zA-Z0-9 ]+) ([\u4e00-\u9fa5])', r'\1&#x2005;\2&#x2005;\3', line)
-            # line = re.sub(r'([\u4e00-\u9fa5]) ([a-zA-Z0-9 ]+)([。、，；])', r'\1&#x2005;\2\3', line)
+            # CJK & Latin spacing
+            line = re.sub(r'(['+cjk_range+r']) ([a-zA-Z0-9 ]+) (['+cjk_range+r'])', r'\1&#x2006;\2&#x2006;\3', line)
+            line = re.sub(r'(['+cjk_range+r']) ([a-zA-Z0-9 ]+)([。、，；])', r'\1&#x2006;\2\3', line)
+            # line = re.sub(r'(['+cjk_range+r']) (<a.*/a>) (['+cjk_range+r'])', r'\1&#x2006;\2&#x2006;\3', line)
 
             # CJK quotation marks font, no longer useful as stylesheet will do
             # if cjk == True:
@@ -98,15 +103,18 @@ def conv_html(input_lines, input_type='p'):
                 line = subbed_line
 
             # acronyms
+            # format: (CAPITAL)
             line = re.sub(r'\(([A-Z]+)\)', r'<abbr>'+r'\1'+r'</abbr>', line)
 
             # hyperlinks
-            line = re.sub(r'\{((.(?!\{))*)\}\{((.(?!\{))*)\}', r'<a href="\1" target=_blank>\3</a>', line)
+            # format: {link}{alternative}
+            line = re.sub(r' \{((.(?!\{))*)\}\{((.(?!\{))*)\} ', r'&#x2006;<a href="\1" target=_blank>\3</a>&#x2006;', line)
 
             # spacing in parentheses
             line = re.sub(r'\(((.(?!\())*)\)', r'(<span style="display: inline-block; width: 1.5px"></span>\1<span style="display: inline-block; width: 1.5px"></span>)', line)
 
             # inline code block
+            # format: [code]
             line = re.sub(r'\[((.(?!\[))*)\]', r'<span class="entry-paragraph-inline-code">'+r'\1'+r'</span>', line)
 
             line.replace('emptyline', '')
@@ -174,13 +182,12 @@ with open(input_filename, encoding='utf8') as input_file:
                 conv_html(content_lines, 't')
         
         # write file
-        with open(output_filename, 'w', encoding='utf8') as output_file:
+        with open(output_html, 'w', encoding='utf8') as output_file:
             for i in output_lines:
                 output_file.write(i)
             output_file.write(
                 ' '*4+'</main>\n'
                 +'</body>'
             )
-        
-        shutil.copy(output_filename, output_html)
+        shutil.copy(input_filename, original_text_dir+entry_name+'.txt')
 
