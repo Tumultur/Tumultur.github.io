@@ -10,6 +10,7 @@
 
 .small-caps {
   font-variant-caps: all-small-caps;
+  letter-spacing: .015em;
 }
 
 .all-caps {
@@ -32,8 +33,7 @@ header{
   min-width: 60%;
   max-width: 80%;
   margin: auto;
-  padding-top: 10px;
-  font-size: 24px;
+  padding-top: 15px;
 }
 .title-wrapper{
   display: flex;
@@ -41,20 +41,23 @@ header{
   justify-content: space-between;
 }
 .header-divider{
-  height:1px;
+  height:1.2px;
   border:none;
   background:black;
-  margin-top:6px;
-  margin-bottom: 24px;
+  margin-top: 12px;
+  margin-bottom: 12px;
+}
+.header-title{
+  font-family: 'Segoe UI';
 }
 .header-title:hover{
   text-decoration: none;
 }
-.header-link:hover{
-  text-decoration: none;
-}
 .header-link{
   float: right;
+}
+.header-link:hover{
+  text-decoration: none;
 }
 
 /* main */
@@ -63,7 +66,7 @@ main{
   min-width: 60%;
   max-width: 80%;
   margin: auto;
-  /* padding: 15px; */
+  padding-bottom: 20px;
 }
 
 /* hyperlink */
@@ -83,9 +86,9 @@ a:hover{
 }
 
 /* module */
-.module{
-  margin-bottom: 12px;
-}
+/* .module{
+  margin-bottom: 6px;
+} */
 .module-title{
   /* font-style: italic; */
   margin-bottom: 6px;

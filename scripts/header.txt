@@ -16,10 +16,11 @@
     </style>
 </head>
 <body>
-    <header style="background-color: #23507f;">
-        <a class="header-title" href="../index.html">Tmlt_blog</a>
-        <p class="header-link-container">
-            <a class="header-link" href="https://github.com/Tumultur" target="_blank">Github</a>
-        </p>
+    <header>
+        <div class="title-wrapper">
+            <a class="header-title all-caps" href="../index.html">Tumultur’s Blog</a>
+            <a class="header-link small-caps" href="https://github.com/Tumultur" target="_blank">Github</a>
+        </div>
+        <hr class="header-divider">
     </header>
     <main>

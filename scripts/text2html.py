@@ -2,8 +2,8 @@ import re
 import shutil
 import os
 
-entry_name = 'kindle'
-cjk = True
+# entry_name = 'type_rant'
+# cjk = True
 cjk_range = r'\u2e80-\u2eff\u2f00-\u2fdf\u3040-\u309f\u30a0-\u30fa\u30fc-\u30ff\u3100-\u312f\u3200-\u32ff\u3400-\u4dbf\u4e00-\u9fff\uf900-\ufaff'
 cjk_quotation_styling = '<span style="font-family: \'PingFang SC\', \'Microsoft Yahei\'">'
 cjk_quotations = r'[。，；：、《（“‘》）”’]'
@@ -15,16 +15,25 @@ entries_dir = 'd:/miscellaneous/personal/code/frontend/git/entries/'
 
 input_filename = script_dir+'input.txt'
 original_text_dir = entries_dir+'original/'
-output_html = entries_dir+entry_name+'.html'
 
-if cjk == False:
-    header_filename = script_dir+'header.txt'
-else:
-    header_filename = script_dir+'cjk_header.txt'
+def conv_html(input_lines, input_type='p', cjk=False):
+    global header_filename
+    global entry_name
 
-def conv_html(input_lines, input_type='p'):
     # omit type identifier
     input_lines = input_lines[1:] 
+
+    if input_type == 'm':
+        if input_lines[1] == 'cjk':
+            cjk = True
+        elif input_lines[1] == 'latin':
+            cjk = False
+        if cjk == False:
+            header_filename = script_dir+'header.txt'
+        else:
+            header_filename = script_dir+'cjk_header.txt'
+        
+        entry_name = input_lines[0]
 
     # code block
     if input_type == 'c':
@@ -153,33 +162,39 @@ def conv_html(input_lines, input_type='p'):
         )
 
 with open(input_filename, encoding='utf8') as input_file:
-    with open(header_filename, encoding='utf8') as header_file:
-        output_lines = []
-
-        # header
-        for i in header_file.readlines():
-            output_lines.append(i)
+    output_lines = []
         
-        # omit first (empty) item
-        all_lines = input_file.read()
-        lines = all_lines.split('startsection\n')
-        lines = lines[1:]
+    # omit first (empty) item
+    all_lines = input_file.read()
+    lines = all_lines.split('startsection\n')
+    lines = lines[1:]
 
-        # omit empty (originally line break) items
-        for content_lines in lines:
-            content_lines = content_lines.split('\n')
-            while '' in content_lines:
-                content_lines.remove('')
+    # omit empty (originally line break) items
+    for content_lines in lines:
+        content_lines = content_lines.split('\n')
+        while '' in content_lines:
+            content_lines.remove('')
 
-            # identify section type
-            if content_lines[0] == 'paragraphsection':
-                conv_html(content_lines, 'p')
-            elif content_lines[0] == 'codesection':
+        # identify section type and convert
+        if content_lines[0] == 'paragraphsection':
+            conv_html(content_lines, 'p')
+        elif content_lines[0] == 'codesection':
                 conv_html(content_lines, 'c')
-            elif content_lines[0] == 'imagesection':
-                conv_html(content_lines, 'i')
-            elif content_lines[0] == 'entrytitlesection':
-                conv_html(content_lines, 't')
+        elif content_lines[0] == 'imagesection':
+            conv_html(content_lines, 'i')
+        elif content_lines[0] == 'entrytitlesection':
+            conv_html(content_lines, 't')
+        elif content_lines[0] == 'metadatasection':
+            conv_html(content_lines, 'm')
+
+    with open(header_filename, encoding='utf8') as header_file:
+        # header
+        header_lines = header_file.readlines()
+        header_lines.reverse()
+        for i in header_lines:
+            output_lines.insert(0, i)
+
+        output_html = entries_dir+entry_name+'.html'
         
         # write file
         with open(output_html, 'w', encoding='utf8') as output_file:
@@ -190,4 +205,3 @@ with open(input_filename, encoding='utf8') as input_file:
                 +'</body>'
             )
         shutil.copy(input_filename, original_text_dir+entry_name+'.txt')
-

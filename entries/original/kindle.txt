@@ -4,6 +4,11 @@ entrytitlesection
 2023-02-03
 
 startsection
+metadatasection
+kindle
+cjk
+
+startsection
 paragraphsection
 去年黑五花 180 镑购入了 Kindle Oasis 3。我平时读书并不太多，算是冲动消费了。不过既然已经花了钱，还是打算好好用一下再说。
 阅读 PDF 的体验只能用非常糟糕来形容：向前翻页时延迟相当明显，向后翻页则需等待五到十秒。缩放非常不便，也不能使用连续滚动。当然这情有可原，毕竟 PDF 本来就不是 Kindle 的专项。很好奇国产阵营的阅读器会不会拥有更好的支持。

@@ -4,27 +4,12 @@
   unicode-range: U+2018-2019, U+201C-201D;
 }
 
-.text-figures {
-  font-variant-numeric: oldstyle-nums;
-}
-
-.small-caps {
-  font-variant-caps: all-small-caps;
-  letter-spacing: .015em;
-}
-
-.all-caps {
-  text-transform: uppercase;
-  letter-spacing: .03em;
-}
-
 body {
   margin: 0;
   padding: 0;
-  line-height: 1.2;
-  font-family: 'Chinese Quotes', 'SF Pro', 'Segoe UI', 'PingFang SC', 'Microsoft Yahei', sans-serif;
+  font-family: 'SF Pro Text', 'Segoe UI', 'PingFang SC', 'Microsoft Yahei', sans-serif;
   font-weight: 400;
-  font-size: 20px;
+  font-size: 18px;
   /* text-align: justify; */
   text-justify: inter-word;
   -ms-hyphens: auto;
@@ -33,39 +18,26 @@ body {
 }
 
 /* header */
-/* header */
 header{
-  width: 600px;
-  min-width: 60%;
-  max-width: 80%;
-  margin: auto;
-  padding-top: 15px;
-}
-.title-wrapper{
   display: flex;
   align-items: center;
-  justify-content: space-between;
-}
-.header-divider{
-  height:1.2px;
-  border:none;
-  background:black;
-  margin-top: 12px;
-  margin-bottom: 12px;
+  justify-content: center;
+  padding: 10px;
 }
 .header-title{
-  font-family: 'Segoe UI';
-  color: black;
-}
-.header-title:hover{
   text-decoration: none;
+  color: #FFF;
+  font-size: 32px;
+}
+.header-link-container{
+  position: absolute;
+  right: 20px;
 }
 .header-link{
-  color: black;
-  float: right;
-}
-.header-link:hover{
-  text-decoration: none;
+  color: #FFF;
+  padding: 3px 10px;
+  border: 1.5px solid;
+  border-color: #FFF;
 }
 
 /* main */
@@ -74,7 +46,7 @@ main{
   min-width: 60%;
   max-width: 80%;
   margin: auto;
-  padding-bottom: 20px;
+  padding: 15px;
 }
 
 /* hyperlink */
@@ -90,17 +62,17 @@ a:not(.header-title):hover{
 .entry-header > *{
   margin: 0px;
 }
-/* .entry-header-title{
+.entry-header-title{
   font-size: 28px;
-} */
+}
 .entry-header-date{
   line-height: 1;
-  margin-bottom: 12px;
+  margin-bottom: 20px;
 }
 
 /* entry paragraph */
 .entry-paragraph-title{
-    font-size: 20px;
+    font-size: 24px;
     margin: 0px;
 }
 .entry-paragraph-content{
